@@ -1,5 +1,6 @@
 <?php
 $dbFile = 'calculadora.db';
+$logFile = fopen('log.txt', 'a') or die('Erro ao abrir o arquivo de log');
 
 try {
     $db = new PDO('sqlite:' . $dbFile);
@@ -16,6 +17,12 @@ try {
     die('Erro ao conectar ao banco de dados: ' . $e->getMessage());
 }
 
+
+function logOperacao($num1, $num2, $op, $resultado, $mensagem) {
+    global $logFile;
+    $logData = date('Y-m-d H:i:s') . " - Operação: $num1 $op $num2 = $resultado - $mensagem\n";
+    fwrite($logFile, $logData);
+}
 function calcular($num1, $num2, $op) {
     global $db;
 
@@ -38,15 +45,21 @@ function calcular($num1, $num2, $op) {
                 }
                 break;
             default:
-                return 'Operação inválida';
+                $mensagem = 'Operação inválida';
+                logOperacao($num1, $num2, $op, $resultado, $mensagem);
+                return $mensagem;
         }
 
         $stmt = $db->prepare('INSERT INTO historico (num1, num2, op, result) VALUES (?, ?, ?, ?)');
         $stmt->execute([$num1, $num2, $op, $resultado]);
 
+        $mensagem = 'Operação realizada com sucesso';
+        logOperacao($num1, $num2, $op, $resultado, $mensagem);
         return $resultado;
     } catch (Exception $e) {
-        return 'Erro no cálculo: ' . $e->getMessage();
+        $mensagem = 'Erro no cálculo: ' . $e->getMessage();
+        logOperacao($num1, $num2, $op, $resultado, $mensagem);
+        return $mensagem;
     }
 }
 
@@ -56,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['num1'], $_POST['num2'
     $op = $_POST['op'];
     $resultado = calcular($num1, $num2, $op);
 }
+fclose($logFile); 
 ?>
 
 <!DOCTYPE html>
