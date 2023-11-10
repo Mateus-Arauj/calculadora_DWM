@@ -89,6 +89,9 @@ fclose($logFile);
         }
       }
     }
+    function validarNumero(input) {
+            input.value = input.value.replace(/[^0-9.]/g, ''); //Validar números
+        }
   </script>
 </head>
 <body class = "bg-blue-200">
@@ -98,11 +101,11 @@ fclose($logFile);
 </div>
     <form class="flex flex-col space-y-4" method="post" action="">
         <label for="num1" class="text-lg">Número 1:</label>
-        <input type="number" name="num1" id="num1" required
+        <input type="number" name="num1" id="num1" required oninput="validarNumero(this)"
             class="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500">
 
         <label for="num2" class="text-lg">Número 2:</label>
-        <input type="number" name="num2" id="num2" required
+        <input type="number" name="num2" id="num2" required oninput="validarNumero(this)"
             class="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500">
 
         <label for="op" class="text-lg">Operação (+, -, *, /):</label>
