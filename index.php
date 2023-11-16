@@ -94,12 +94,35 @@ fclose($logFile);
         }
   </script>
 </head>
-<body class = "bg-blue-200">
-<div class="container mx-auto p-4">
-    <div class = "w-full items-center">
-        <h1 class="text-4xl font-bold mb-4">Calculadora</h1>
-</div>
-    <form class="flex flex-col space-y-4" method="post" action="">
+<style>
+    /* Responsividade */
+    @media (max-width: 768px) {
+        #result {
+            font-size: 0.8rem;
+        }
+        #result th,
+        #result td {
+            padding: 0.5rem; 
+        }
+    }
+
+    @media (max-width: 480px) {
+        #result {
+            font-size: 0.7rem; 
+        }
+        #result th,
+        #result td {
+            padding: 0.3rem; 
+        }
+    }
+</style>
+
+<body class="bg-blue-200">
+    <div class="container mx-auto p-4">
+        <div class="w-full items-center">
+            <h1 class="text-4xl font-bold mb-4">Calculadora</h1>
+        </div>
+        <form class="flex flex-col space-y-4" method="post" action="">
         <label for="num1" class="text-lg">Número 1:</label>
         <input type="number" name="num1" id="num1" required oninput="validarNumero(this)"
             class="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-blue-500">
@@ -123,13 +146,11 @@ fclose($logFile);
     <?php if (isset($resultado)): ?>
         <p class = "mt-5 mb-5 ml-5">Resultado: <?php echo $resultado; ?></p>
     <?php endif; ?>
-    <div class = "flex flex-row w-full">
-
+    <div class="flex flex-row w-full items-center">
         <h2 class="text-2xl font-bold mb-4 ml-4">Histórico</h2>
-        <button class = "bg-blue-400 ml-10  w-20 h-10 rounded text-white" onClick = {toggleVisibility()}>Mostrar</button>
-
+        <button class="bg-blue-400 ml-4 px-3 py-1 rounded text-white" onclick="toggleVisibility()">Mostrar</button>
     </div>
-<table class="min-w-full border border-gray-300 overflow-x-auto" id = "result">
+    <table class="min-w-full border border-gray-300 divide-y divide-gray-200" id="result">
     <thead>
         <tr>
             <th class="py-2 px-4 bg-gray-200 border-b">ID</th>
